@@ -6,10 +6,10 @@ First, download the library from npm:
 npm install react-native-maps --save
 ```
 
-Then you must install the native dependencies. You can use [`rnpm`](https://github.com/rnpm/rnpm) to
+Then you must install the native dependencies. You can use `rnpm` (now part of `react-native` core) to
 add native dependencies automatically:
 
-`$ rnpm link`
+`$ react-native link`
 
 Go to step 4 to configure Google Maps API KEY in Android.
 
@@ -40,18 +40,25 @@ To install using Cocoapods, simply insert the following line into your `Podfile`
 
 ## Android
 
-1. in your `build.gradle` add:
+1. in your `android/app/build.gradle` add:
 ```groovy
 ...
 dependencies {
   ...
-  compile 'com.airbnb.android:react-native-maps:0.7.1'
+  compile project(':react-native-maps')
 }
 ```
 
-For React Native v0.29.0 or above:
+2. in your `android/settings.gradle` add:
+```groovy
+...
+include ':react-native-maps'
+project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
+```
 
-2. in your application object, add:
+3. in your application object, add:
+
+For React Native v0.29.0 or above:
 
 ```java
 public class MyApplication extends Application implements ReactApplication {
@@ -95,7 +102,7 @@ For older versions of React Native:
 4. Specify your Google Maps API Key:
     > To develop is recommended a ***Browser Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
 
-Add your API key to your manifest file:
+Add your **Browser** API key to your manifest file:
 
 ```xml
 <application>
@@ -103,6 +110,18 @@ Add your API key to your manifest file:
     <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="{{Your Google maps API Key Here}}"/>
+</application>
+```
+    > If that doesn't work try using an ***Android Key*** without refeer restriction. Go to https://console.developers.google.com/apis/credentials to check your credentials.
+
+Add your **Android** API key to your manifest file:
+
+```xml
+<application>
+    <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+    <meta-data
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="{{@string/ANDROID_GOOGLE_MAPS_API_KEY}}"/>
 </application>
 ```
 
@@ -156,12 +175,12 @@ module.exports = React.createClass({
             <View style ={styles.container}>
                 <MapView
                     style={styles.map}
-                    region={
+                    region={{
                         latitude: 37.78825,
                         longitude: -122.4324,
                         latitudeDelta: 0.015,
                         longitudeDelta: 0.0121,
-                    }
+                    }}
                     >
                 </MapView>
             </View>
