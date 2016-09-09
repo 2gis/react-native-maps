@@ -163,6 +163,7 @@
                                          inView:annotationView
                               constrainedToView:self.map
                                        animated:YES];
+                                       self.map.calloutView.coordinate = self.coordinate;
 }
 
 - (void)hideCalloutView
